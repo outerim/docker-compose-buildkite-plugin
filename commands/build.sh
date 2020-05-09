@@ -71,6 +71,7 @@ while read -r line ; do
 done <<< "$(plugin_read_list BUILD)"
 
 build_params=(--pull)
+build_params+=(--progress plain)
 
 if [[ "$(plugin_read_config NO_CACHE "false")" == "true" ]] ; then
   build_params+=(--no-cache)
