@@ -10,6 +10,8 @@ DIR="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
 
 commands=()
 
+env
+
 [[ -n "$(plugin_read_list BUILD)" ]] && commands+=("BUILD")
 [[ -n "$(plugin_read_list RUN)" ]] && commands+=("RUN")
 

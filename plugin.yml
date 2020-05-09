@@ -23,6 +23,9 @@ configuration:
     env:
       type: [ string, array ]
       minimum: 1
+    secrets:
+      type: array
+      minimum: 1
     environment:
       type: [ string, array ]
       minimum: 1

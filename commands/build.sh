@@ -85,7 +85,15 @@ while read -r arg ; do
 done <<< "$(plugin_read_list ARGS)"
 
 echo "+++ :docker: Building services ${services[*]}"
-run_docker_compose -f "$override_file" build "${build_params[@]}" "${services[@]}"
+if [[ "$(plugin_read_config USE_BUILDKIT "false")" == "true" ]] ; then
+  while read -r arg ; do
+    [[ -n "${arg:-}" ]] && build_params+=("--secret" "${arg}")
+  done <<< "$(plugin_read_list SECRETS)"
+
+  plugin_prompt_and_run "docker" "build" "--progress=plain" "--target=$(plugin_read_config TARGET "missing-target-config")" "--tag=${build_images[1]}" ${build_params[@]} $(plugin_read_config BUILD_DIR ".")
+else
+  run_docker_compose -f "$override_file" build "${build_params[@]}" "${services[@]}"
+fi
 
 if [[ -n "$image_repository" ]] ; then
   echo "~~~ :docker: Pushing built images to $image_repository"
